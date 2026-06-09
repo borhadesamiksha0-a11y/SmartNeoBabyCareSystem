@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Medical Report</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f7fb;
+    padding:40px;
+}
+
+.report-box{
+
+    max-width:800px;
+    margin:auto;
+
+    background:white;
+    padding:40px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#0f3460;
+    margin-bottom:30px;
+}
+
+.row{
+    margin-bottom:18px;
+}
+
+.label{
+    font-weight:bold;
+    color:#333;
+}
+
+.print-btn{
+
+    margin-top:30px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    background:#0d6efd;
+    color:white;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+@media print{
+
+    .print-btn{
+        display:none;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="report-box">
+
+    <h1>📄 Medical Report</h1>
+
+    <div class="row">
+        <span class="label">Child Name:</span>
+        <span id="child_name"></span>
+    </div>
+
+    <div class="row">
+        <span class="label">Diagnosis:</span>
+        <span id="diagnosis"></span>
+    </div>
+
+    <div class="row">
+        <span class="label">Prescription:</span>
+        <span id="prescription"></span>
+    </div>
+
+    <div class="row">
+        <span class="label">Doctor Name:</span>
+        <span id="doctor_name"></span>
+    </div>
+
+    <div class="row">
+        <span class="label">Date:</span>
+        <span id="date"></span>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">
+        🖨 Print Report
+    </button>
+
+</div>
+
+<script>
+
+async function loadSingleReport(){
+
+    const params = new URLSearchParams(window.location.search);
+
+    const id = params.get("id");
+
+    const response =
+    await fetch('/api/reports');
+
+    const data = await response.json();
+
+    const report =
+    data.find(r => r.r_id == id);
+
+    if(!report){
+
+        alert("Report Not Found");
+
+        return;
+    }
+
+    document.getElementById("child_name").innerText =
+    report.child_name;
+
+    document.getElementById("diagnosis").innerText =
+    report.diagnosis;
+
+    document.getElementById("prescription").innerText =
+    report.prescription;
+
+    document.getElementById("doctor_name").innerText =
+    report.doctor_name;
+
+    document.getElementById("date").innerText =
+    new Date(report.created_at).toLocaleDateString();
+
+}
+
+loadSingleReport();
+
+</script>
+
+</body>
+</html>

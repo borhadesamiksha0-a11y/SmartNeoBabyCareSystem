@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Parent Dashboard</title>
+
+<style>
+
+/* RESET */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#eef2f7;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    background:#16213e;
+    color:white;
+    padding:30px 20px;
+    position:fixed;
+    height:100%;
+}
+
+.sidebar h2{
+    margin-bottom:40px;
+    font-size:32px;
+    line-height:1.3;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:10px;
+    transition:0.3s;
+    font-size:18px;
+}
+
+.sidebar a:hover{
+    background:#0f3460;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:260px;
+    width:100%;
+    padding:30px;
+}
+
+/* HEADER */
+
+.header{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:25px;
+}
+
+.header h1{
+    color:#16213e;
+    margin-bottom:10px;
+}
+
+/* ALERTS */
+
+.alert{
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:20px;
+    font-size:18px;
+}
+
+.upcoming{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.missed{
+    background:#f8d7da;
+    color:#721c24;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:25px;
+}
+
+/* SECTION TITLE */
+
+.card h2{
+    margin-bottom:20px;
+    color:#16213e;
+}
+
+/* TABLE */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    margin-bottom:25px;
+}
+
+table th{
+    background:#0f3460;
+    color:white;
+    padding:15px;
+    text-align:left;
+}
+
+table td{
+    padding:15px;
+    border-bottom:1px solid #ddd;
+}
+
+table tr:hover{
+    background:#f5f8ff;
+    transition:0.3s;
+}
+
+/* STATUS */
+
+.pending{
+    color:orange;
+    font-weight:bold;
+}
+
+.approved{
+    color:green;
+    font-weight:bold;
+}
+
+/* STATUS BADGES */
+
+.status-completed{
+    background:#d4edda;
+    color:#155724;
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.status-current{
+    background:#cce5ff;
+    color:#004085;
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.status-upcoming{
+    background:#fff3cd;
+    color:#856404;
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+/* HIDE */
+
+.section{
+    display:none;
+}
+
+/* SUB HEADINGS */
+
+.subheading{
+    margin-top:25px;
+    margin-bottom:10px;
+    color:#0f3460;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <h2>👨‍👩‍👧 Parent Panel</h2>
+
+    <a href="#" onclick="showSection('dashboardSection')">
+        🏠 Dashboard
+    </a>
+
+    <a href="/childForm.html">
+        ➕ Add Child
+    </a>
+
+    <a href="#" onclick="showSection('childrenSection')">
+        👶 My Children
+    </a>
+
+    <a href="#" onclick="showSection('vaccinationSection')">
+        💉 Vaccinations
+    </a>
+
+    <a href="#" onclick="showSection('appointmentSection')">
+        📅 Appointments
+    </a>
+
+    <a href="#" onclick="showSection('reportSection')">
+        📄 Reports
+    </a>
+
+    <a href="/logout">
+        🚪 Logout
+    </a>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <!-- DASHBOARD -->
+
+    <div class="section" id="dashboardSection" style="display:block;">
+
+        <div class="header">
+
+            <h1>Welcome Parent 👋</h1>
+
+            <p>
+                Manage your child healthcare records and vaccinations.
+            </p>
+
+        </div>
+
+        <div class="alert upcoming">
+            🔔 Upcoming Vaccination:
+            <b>Polio Vaccine</b> due soon
+        </div>
+
+        <div class="alert missed">
+            ❌ Missed Vaccination:
+            <b>Hepatitis B</b>
+        </div>
+
+    </div>
+
+    <!-- CHILDREN SECTION -->
+
+    <div class="card section" id="childrenSection">
+
+        <h2>👶 My Children</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="childTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- VACCINATION SECTION -->
+
+    <div class="card section" id="vaccinationSection">
+
+        <h2>💉 Vaccination Schedule</h2>
+
+        <!-- CURRENT -->
+
+        <h3 class="subheading">
+            🟢 Current Vaccinations
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Child ID</th>
+                    <th>Child Name</th>
+                    <th>Vaccine</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="currentVaccineTable">
+
+            </tbody>
+
+        </table>
+
+        <!-- PREVIOUS -->
+
+        <h3 class="subheading">
+            ✅ Previous Vaccinations
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Child ID</th>
+                    <th>Child Name</th>
+                    <th>Vaccine</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="previousVaccineTable">
+
+            </tbody>
+
+        </table>
+
+        <!-- UPCOMING -->
+
+        <h3 class="subheading">
+            🔔 Upcoming Vaccinations
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Child ID</th>
+                    <th>Child Name</th>
+                    <th>Vaccine</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="upcomingVaccineTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- APPOINTMENTS -->
+
+    <div class="card section" id="appointmentSection">
+
+        <h2>📅 Appointments</h2>
+
+        <p>No appointments available.</p>
+
+    </div>
+
+    <!-- REPORTS -->
+
+    <div class="card section" id="reportSection">
+
+        <h2>📄 Reports</h2>
+
+        <p>No reports available.</p>
+
+    </div>
+
+</div>
+
+<script>
+
+/* SHOW SECTION */
+
+function showSection(sectionId){
+
+    // HIDE ALL
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // SHOW SELECTED
+    document.getElementById(sectionId).style.display = 'block';
+}
+
+/* LOAD CHILDREN */
+
+fetch('/api/mychildren')
+
+.then(res => res.json())
+
+.then(data => {
+
+    let table = document.getElementById('childTable');
+
+    table.innerHTML = '';
+
+    data.forEach(child => {
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${child.name}</td>
+
+            <td>${child.age}</td>
+
+            <td class="${
+                child.status === 'Approved'
+                ? 'approved'
+                : 'pending'
+            }">
+
+                ${child.status || 'Pending'}
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+})
+
+.catch(err => {
+    console.log(err);
+});
+
+/* LOAD VACCINATIONS */
+
+/* LOAD VACCINATIONS */
+
+fetch('/api/myvaccinations')
+
+.then(res => res.json())
+
+.then(data => {
+
+    let table = document.getElementById('vaccineTable');
+
+    table.innerHTML = '';
+
+    data.forEach(v => {
+
+        // FORMAT DATE
+        let formattedDate = new Date(v.due_date)
+        .toLocaleDateString('en-GB', {
+            day:'2-digit',
+            month:'short',
+            year:'numeric'
+        });
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${v.child_id}</td>
+
+            <td>${v.child_name}</td>
+
+            <td>${v.vaccine_name}</td>
+
+            <td>${formattedDate}</td>
+
+            <td>${v.status}</td>
+
+        </tr>
+
+        `;
+
+    
+        // SORT BY STATUS
+
+        if(v.status === 'Completed'){
+
+            previousTable.innerHTML += row;
+        }
+
+        else if(v.status === 'Current'){
+
+            currentTable.innerHTML += row;
+        }
+
+        else{
+
+            upcomingTable.innerHTML += row;
+        }
+
+    });
+
+})
+
+.catch(err => {
+
+    console.log(err);
+
+});
+
+</script>
+
+</body>
+</html>

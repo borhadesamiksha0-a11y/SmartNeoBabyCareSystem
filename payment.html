@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment Page</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:url('/images/bg3.jpg') no-repeat center center/cover;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.payment-box{
+
+    width:420px;
+    background:rgba(255,255,255,0.92);
+    padding:30px;
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+h1{
+    text-align:center;
+    color:#0f766e;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+label{
+    font-weight:600;
+    display:block;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.pay-btn{
+
+    width:100%;
+    padding:14px;
+
+    background:#0ea5e9;
+    color:white;
+
+    border:none;
+    border-radius:10px;
+
+    font-size:18px;
+    cursor:pointer;
+
+    margin-top:15px;
+}
+
+.pay-btn:hover{
+    background:#0284c7;
+}
+
+.amount{
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    color:#16a34a;
+    margin-bottom:20px;
+}
+
+.success{
+    text-align:center;
+    color:green;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+/* PAYMENT TYPES */
+
+.payment-types{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.pay-option{
+    flex:1;
+    background:#f1f5f9;
+    padding:12px;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+    border:2px solid transparent;
+}
+
+.pay-option:hover{
+    background:#e2e8f0;
+}
+
+.pay-option input{
+    margin-right:5px;
+    width:auto;
+}
+
+.offline-box{
+    background:#fff3cd;
+    padding:15px;
+    border-radius:10px;
+    color:#856404;
+    font-weight:bold;
+    line-height:1.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="payment-box">
+
+    <h1>💳 Appointment Payment</h1>
+
+    <div class="amount">
+        Amount: ₹500
+    </div>
+
+    <!-- PAYMENT METHODS -->
+
+    <label>Select Payment Method</label>
+
+    <div class="payment-types">
+
+        <label class="pay-option">
+            <input
+                type="radio"
+                name="paymentType"
+                value="card"
+                checked
+                onchange="changePaymentType()"
+            >
+            💳 Card
+        </label>
+
+        <label class="pay-option">
+            <input
+                type="radio"
+                name="paymentType"
+                value="upi"
+                onchange="changePaymentType()"
+            >
+            📱 UPI
+        </label>
+
+        <label class="pay-option">
+            <input
+                type="radio"
+                name="paymentType"
+                value="offline"
+                onchange="changePaymentType()"
+            >
+            💵 Offline
+        </label>
+
+    </div>
+
+    <!-- CARD SECTION -->
+
+    <div id="cardSection">
+
+        <div class="input-group">
+            <label>Card Holder Name</label>
+            <input type="text" id="holder" placeholder="Enter Name">
+        </div>
+
+        <div class="input-group">
+            <label>Card Number</label>
+            <input type="text" id="card" placeholder="1234 5678 9012 3456">
+        </div>
+
+        <div class="input-group">
+            <label>Expiry Date</label>
+            <input type="text" id="expiry" placeholder="MM/YY">
+        </div>
+
+        <div class="input-group">
+            <label>CVV</label>
+            <input type="password" id="cvv" placeholder="123">
+        </div>
+
+    </div>
+
+    <!-- UPI SECTION -->
+
+    <div id="upiSection" style="display:none;">
+
+        <div class="input-group">
+            <label>UPI ID</label>
+            <input type="text" id="upi" placeholder="example@upi">
+        </div>
+
+    </div>
+
+    <!-- OFFLINE SECTION -->
+
+    <div id="offlineSection" style="display:none;">
+
+        <div class="offline-box">
+
+            🏥 Pay directly at hospital reception.<br><br>
+
+            Your appointment will remain reserved temporarily.
+
+        </div>
+
+    </div>
+
+    <!-- BUTTON -->
+
+    <button class="pay-btn" onclick="makePayment()">
+        Pay Now
+    </button>
+
+    <div class="success" id="successMsg"></div>
+
+</div>
+
+<script>
+
+/* CHANGE PAYMENT TYPE */
+
+function changePaymentType(){
+
+    const type =
+    document.querySelector(
+        'input[name="paymentType"]:checked'
+    ).value;
+
+    document.getElementById("cardSection").style.display = "none";
+    document.getElementById("upiSection").style.display = "none";
+    document.getElementById("offlineSection").style.display = "none";
+
+    if(type === "card"){
+
+        document.getElementById("cardSection").style.display = "block";
+
+    }
+
+    else if(type === "upi"){
+
+        document.getElementById("upiSection").style.display = "block";
+
+    }
+
+    else{
+
+        document.getElementById("offlineSection").style.display = "block";
+
+    }
+}
+
+/* PAYMENT */
+
+function makePayment(){
+
+    const type =
+    document.querySelector(
+        'input[name="paymentType"]:checked'
+    ).value;
+
+    // CARD VALIDATION
+
+    if(type === "card"){
+
+        const holder =
+        document.getElementById("holder").value;
+
+        const card =
+        document.getElementById("card").value;
+
+        const expiry =
+        document.getElementById("expiry").value;
+
+        const cvv =
+        document.getElementById("cvv").value;
+
+        if(!holder || !card || !expiry || !cvv){
+
+            alert("Please Fill All Card Fields");
+            return;
+        }
+    }
+
+    // UPI VALIDATION
+
+    if(type === "upi"){
+
+        const upi =
+        document.getElementById("upi").value;
+
+        if(!upi){
+
+            alert("Please Enter UPI ID");
+            return;
+        }
+    }
+
+    // GET APPOINTMENT ID
+
+    const params =
+    new URLSearchParams(window.location.search);
+
+    const id = params.get("id");
+
+    fetch('/payAppointment/' + id, {
+
+        method:'POST'
+
+    })
+
+    .then(res => res.text())
+
+    .then(msg => {
+
+        document.getElementById("successMsg").innerHTML =
+        "✅ Payment Successful";
+
+        setTimeout(() => {
+
+            window.location.href = "parentDashboard.html";
+
+        }, 2000);
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("Payment Failed");
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

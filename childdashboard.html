@@ -1,0 +1,547 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Child Dashboard</title>
+
+    <style>
+        /* body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            padding: 30px;
+        } */
+         body {
+    font-family: 'Poppins', sans-serif;
+
+    /* 🔥 Background Image */
+    background: url('/images/bg2.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    padding: 30px;
+}
+
+
+        .card {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2193b0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .profile {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2193b0;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .details p {
+            margin: 6px 0;
+        }
+
+        .section {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+        .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.4); /* dark effect */
+    z-index: -1;
+}
+
+
+        h3 {
+            margin-bottom: 10px;
+            color: #2193b0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+
+
+    <div class="header">
+        <h2>👶 Child Health Dashboard</h2>
+    </div>
+
+    <div class="profile">
+        <img id="photo" src="" alt="Profile">
+
+        <div class="details">
+            <p><b>Name:</b> <span id="name"></span></p>
+            <p><b>Father:</b> <span id="father"></span></p>
+            <p><b>Mother:</b> <span id="mother"></span></p>
+            <p><b>DOB:</b> <span id="dob"></span></p>
+            <p><b>Gender:</b> <span id="gender"></span></p>
+            <p><b>Blood Group:</b> <span id="blood"></span></p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📊 Health Info</h3>
+        <p><b>Age:</b> <span id="age"></span></p>
+        <p><b>Height:</b> <span id="height"></span> cm</p>
+        <p><b>Weight:</b> <span id="weight"></span> kg</p>
+        <p><b>Symptoms:</b> <span id="symptoms"></span></p>
+        <p><b>Symptom Photos:</b></p>
+<div id="symptomPhotos" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+
+    </div>
+
+    <div class="section">
+        <h3>📍 Address</h3>
+        <p id="address"></p>
+    </div>
+
+</div>
+
+<script>
+
+fetch('/api/mychildren')
+.then(res => res.json())
+.then(data => {
+
+    let html = "";
+
+    data.forEach(child => {
+
+        html += `
+
+        <div class="card" style="margin-bottom:30px; cursor:pointer;"
+             onclick="openDetails(${child.id})">
+
+            <div class="header">
+                <h2>👶 Child Health Dashboard</h2>
+            </div>
+
+            <div class="profile">
+
+                <img src="${
+                    child.profile_photo
+                    ? '/uploads/' + child.profile_photo
+                    : 'https://via.placeholder.com/150'
+                }">
+
+                <div class="details">
+
+                    <p><b>Name:</b> ${child.name}</p>
+                    <p><b>Father:</b> ${child.father_name || ''}</p>
+                    <p><b>Mother:</b> ${child.mother_name || ''}</p>
+                    <p><b>DOB:</b> ${child.dob || ''}</p>
+                    <p><b>Gender:</b> ${child.gender || ''}</p>
+                    <p><b>Blood Group:</b> ${child.blood_group || ''}</p>
+
+                </div>
+
+            </div>
+
+            <div class="section">
+
+                <h3>📊 Health Info</h3>
+
+                <p><b>Age:</b> ${child.age || ''}</p>
+                <p><b>Height:</b> ${child.height || ''} cm</p>
+                <p><b>Weight:</b> ${child.weight || ''} kg</p>
+                <p><b>Symptoms:</b> ${child.symptoms || ''}</p>
+
+            </div>
+
+            <div class="section">
+
+                <h3>📍 Address</h3>
+
+                <p>
+                    ${child.city || ''},
+                    ${child.taluka || ''},
+                    ${child.district || ''},
+                    ${child.state || ''}
+                </p>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+
+    document.body.innerHTML += html;
+
+});
+
+function openDetails(id){
+
+    window.location.href =
+    "/childDetails.html?id=" + id;
+
+}
+
+</script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Child Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: 'Poppins', sans-serif;
+
+            background: url('/images/bg2.jpg') no-repeat center center fixed;
+            background-size: cover;
+
+            padding: 30px;
+            min-height:100vh;
+        }
+
+        /* DARK OVERLAY */
+
+        .overlay{
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.4);
+            z-index:-1;
+        }
+
+        /* CONTAINER */
+
+        #cardsContainer{
+            max-width:900px;
+            margin:auto;
+        }
+
+        /* CARD */
+
+        .card{
+            background:white;
+            border-radius:15px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.25);
+            overflow:hidden;
+            margin-bottom:30px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        /* HEADER */
+
+        .header{
+            background:#2193b0;
+            color:white;
+            padding:20px;
+            text-align:center;
+        }
+
+        .header h2{
+            font-size:28px;
+        }
+
+        /* PROFILE */
+
+        .profile{
+            display:flex;
+            gap:20px;
+            padding:25px;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+
+        .profile img{
+            width:150px;
+            height:150px;
+            border-radius:50%;
+            object-fit:cover;
+            border:4px solid #2193b0;
+        }
+
+        .details{
+            flex:1;
+        }
+
+        .details p{
+            margin:8px 0;
+            font-size:16px;
+        }
+
+        /* SECTION */
+
+        .section{
+            padding:20px 25px;
+            border-top:1px solid #eee;
+        }
+
+        .section h3{
+            margin-bottom:15px;
+            color:#2193b0;
+        }
+
+        .section p{
+            margin:8px 0;
+            font-size:15px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:768px){
+
+            .profile{
+                flex-direction:column;
+                text-align:center;
+            }
+
+            .details{
+                width:100%;
+            }
+
+            .profile img{
+                width:120px;
+                height:120px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay"></div>
+
+<!-- CHILD CARDS -->
+<div id="cardsContainer"></div>
+
+<script>
+
+/* ================= LOAD CHILDREN ================= */
+
+fetch('/api/mychildren')
+
+.then(res => res.json())
+
+.then(data => {
+
+    let html = "";
+
+    // NO CHILDREN
+    if(data.length === 0){
+
+        html = `
+
+        <div class="card">
+
+            <div class="header">
+                <h2>👶 Child Dashboard</h2>
+            </div>
+
+            <div class="section" style="text-align:center;">
+
+                <h3>No Child Records Found</h3>
+
+                <p>Please add child details first.</p>
+
+            </div>
+
+        </div>
+
+        `;
+
+        document.getElementById("cardsContainer").innerHTML = html;
+
+        return;
+    }
+
+    // LOOP CHILDREN
+    data.forEach(child => {
+
+        html += `
+
+        <div class="card"
+             onclick="openDetails(${child.id})">
+
+            <!-- HEADER -->
+
+            <div class="header">
+
+                <h2>👶 Child Health Dashboard</h2>
+
+            </div>
+
+            <!-- PROFILE -->
+
+            <div class="profile">
+
+                <img src="${
+                    child.profile_photo
+                    ? '/uploads/' + child.profile_photo
+                    : 'https://via.placeholder.com/150'
+                }" alt="Child Photo">
+
+                <div class="details">
+
+                    <p>
+                        <b>Name:</b>
+                        ${child.name || ''}
+                    </p>
+
+                    <p>
+                        <b>Father:</b>
+                        ${child.father_name || ''}
+                    </p>
+
+                    <p>
+                        <b>Mother:</b>
+                        ${child.mother_name || ''}
+                    </p>
+
+                    <p>
+                        <b>DOB:</b>
+                        ${child.dob || ''}
+                    </p>
+
+                    <p>
+                        <b>Gender:</b>
+                        ${child.gender || ''}
+                    </p>
+
+                    <p>
+                        <b>Blood Group:</b>
+                        ${child.blood_group || ''}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- HEALTH -->
+
+            <div class="section">
+
+                <h3>📊 Health Information</h3>
+
+                <p>
+                    <b>Age:</b>
+                    ${child.age || ''}
+                </p>
+
+                <p>
+                    <b>Height:</b>
+                    ${child.height || ''} cm
+                </p>
+
+                <p>
+                    <b>Weight:</b>
+                    ${child.weight || ''} kg
+                </p>
+
+                <p>
+                    <b>Symptoms:</b>
+                    ${child.symptoms || 'No symptoms'}
+                </p>
+
+            </div>
+
+            <!-- ADDRESS -->
+
+            <div class="section">
+
+                <h3>📍 Address</h3>
+
+                <p>
+
+                    ${child.city || ''},
+
+                    ${child.taluka || ''},
+
+                    ${child.district || ''},
+
+                    ${child.state || ''}
+
+                </p>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+
+    // SHOW DATA
+    document.getElementById("cardsContainer").innerHTML = html;
+
+})
+
+.catch(err => {
+
+    console.log(err);
+
+    document.getElementById("cardsContainer").innerHTML = `
+
+    <div class="card">
+
+        <div class="section" style="text-align:center;">
+
+            <h3>❌ Error Loading Data</h3>
+
+        </div>
+
+    </div>
+
+    `;
+});
+
+/* ================= OPEN DETAILS ================= */
+
+function openDetails(id){
+
+    window.location.href =
+    "/childDetails.html?id=" + id;
+
+}
+
+</script>
+
+</body>
+</html>

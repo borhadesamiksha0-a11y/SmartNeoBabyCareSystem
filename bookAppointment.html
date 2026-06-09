@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Book Appointment</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Poppins', sans-serif;
+
+            background:
+            linear-gradient(
+                rgba(0,0,0,0.4),
+                rgba(0,0,0,0.4)
+            ),
+            url('/images/bg2.jpg');
+
+            background-size:cover;
+            background-position:center;
+
+            min-height:100vh;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            padding:20px;
+        }
+
+        .container{
+
+            width:100%;
+            max-width:500px;
+
+            background:white;
+
+            border-radius:20px;
+
+            padding:35px;
+
+            box-shadow:
+            0 10px 30px rgba(0,0,0,0.3);
+
+        }
+
+        h1{
+
+            text-align:center;
+            color:#2193b0;
+
+            margin-bottom:30px;
+        }
+
+        .form-group{
+
+            margin-bottom:20px;
+        }
+
+        label{
+
+            display:block;
+            margin-bottom:8px;
+
+            font-weight:600;
+            color:#333;
+        }
+
+        select,
+        input{
+
+            width:100%;
+
+            padding:12px;
+
+            border:1px solid #ccc;
+
+            border-radius:10px;
+
+            font-size:15px;
+
+            outline:none;
+        }
+
+        select:focus,
+        input:focus{
+
+            border-color:#2193b0;
+        }
+
+        button{
+
+            width:100%;
+
+            padding:14px;
+
+            border:none;
+
+            border-radius:10px;
+
+            background:#2193b0;
+
+            color:white;
+
+            font-size:17px;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        button:hover{
+
+            background:#176d81;
+        }
+
+        .message{
+
+            margin-top:20px;
+
+            text-align:center;
+
+            font-weight:600;
+        }
+
+        .success{
+            color:green;
+        }
+
+        .error{
+            color:red;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📅 Book Appointment</h1>
+
+        <form id="appointmentForm">
+
+            <!-- CHILD -->
+
+            <div class="form-group">
+
+                <label>Select Child</label>
+
+                <select id="childId" required>
+
+                    <option value="">
+                        -- Select Child --
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label>Appointment Date</label>
+
+                <input type="date"
+                       id="date"
+                       required>
+
+            </div>
+
+            <!-- TIME -->
+
+            <div class="form-group">
+
+                <label>Appointment Time</label>
+
+                <input type="time"
+                       id="time"
+                       required>
+
+            </div>
+
+            <!-- BUTTON -->
+
+            <button type="submit">
+
+                Book Appointment
+
+            </button>
+
+        </form>
+
+        <div id="message"
+             class="message"></div>
+
+    </div>
+
+<script>
+
+/* ================= LOAD MY CHILDREN ================= */
+
+fetch('/api/mychildren')
+
+.then(res => res.json())
+
+.then(data => {
+
+    const childSelect =
+    document.getElementById('childId');
+
+    data.forEach(child => {
+
+        childSelect.innerHTML += `
+
+            <option value="${child.id}">
+
+                ${child.name}
+
+            </option>
+
+        `;
+    });
+
+})
+
+.catch(err => {
+
+    console.log(err);
+
+});
+
+/* ================= BOOK APPOINTMENT ================= */
+
+document
+.getElementById('appointmentForm')
+
+.addEventListener('submit',
+
+async function(e){
+
+    e.preventDefault();
+
+    const childId =
+    document.getElementById('childId').value;
+
+    const date =
+    document.getElementById('date').value;
+
+    const time =
+    document.getElementById('time').value;
+
+    try{
+
+        const response = await fetch(
+            '/createAppointment',
+            {
+                method:'POST',
+
+                headers:{
+                    'Content-Type':'application/json'
+                },
+
+                body: JSON.stringify({
+                    childId,
+                    date,
+                    time
+                })
+            }
+        );
+
+        const result =
+        await response.text();
+
+        const message =
+        document.getElementById('message');
+
+        message.innerHTML = result;
+
+        message.className =
+        "message success";
+
+        // RESET FORM
+
+        document
+        .getElementById('appointmentForm')
+        .reset();
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        const message =
+        document.getElementById('message');
+
+        message.innerHTML =
+        "❌ Booking Failed";
+
+        message.className =
+        "message error";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

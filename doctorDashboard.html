@@ -1,0 +1,1060 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+} */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+
+    background: url('/images/bg3.jpg') no-repeat center center/cover;
+    min-height: 100vh;
+}
+
+/* Layout */
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    background: rgba(30, 41, 59, 0.95);
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 25px;
+}
+
+.sidebar li {
+    list-style: none;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar li:hover {
+    background: #334155;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 25px;
+}
+
+/* Card */
+.card {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    margin: 20px auto;   
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #10b981;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* tr:hover {
+    background: #f1f5f9;
+} */
+tr:hover {
+    background-color: #f9fafb;
+    transition: 0.2s;
+}
+
+/* Buttons */
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    margin: 2px;
+    font-size: 13px;
+}
+
+/* COLORS (FIXED — will NOT change) */
+.view { background: #3498db; }
+.approve { background: #2ecc71; }
+.appointment { background: #f39c12; }
+.delete { background: #e74c3c; }
+
+/* Approved state (ONLY TEXT CHANGE) */
+.approved-text {
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+/* Section */
+.section {
+    display: none;
+}
+/* Status badges */
+.status-pending {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* .status-handled {
+    background: #2ecc71;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+} */
+ .status-handled {
+    background: #2ecc71;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+
+/* 🚨 Blinking effect for emergency */
+@keyframes blink {
+    0% { background-color: #ffe6e6; }
+    50% { background-color: #ffcccc; }
+    100% { background-color: #ffe6e6; }
+}
+
+.emergency-row {
+    animation: blink 1s infinite;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🩺 Doctor Panel</h2>
+        <ul>
+            <li onclick="showSection('child')">👶 Child Records</li>
+            <li onclick="showSection('appointment')">📅 Appointments</li>
+            <li onclick="showSection('vaccination')">💉 Vaccinations</li>
+            <li onclick="showSection('message')">💬 Messages</li>
+            <li onclick="showSection('alert')">🚨 Emergency</li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <h1>Welcome Doctor 👋</h1>
+
+        <!-- CHILD -->
+        <div id="childSection" class="section">
+            <h2>Child Records</h2>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Symptoms</th>
+                            <th>Photos</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="childTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- OTHER SECTIONS -->
+        <!-- <div id="appointmentSection" class="section">
+            <h2>Appointments</h2>
+            <div class="card">Coming Soon...</div>
+        </div> -->
+
+        <div id="appointmentSection" class="section">
+    <h2>📅 Appointment Management</h2>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Child Name</th>
+                    <th>Parent</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="vaccinationSection" class="section">
+
+    <h2>💉 Vaccination Management</h2>
+
+    <div class="card">
+
+        <table width="100%" cellpadding="15">
+
+    <thead style="background:#1abc9c;color:white;">
+        <tr>
+            <th>Child</th>
+            <th>Vaccine</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody id="vaccinationTable">
+    </tbody>
+
+</table>
+    </div>
+
+</div>
+
+<div id="messageSection" class="section">
+    <h2>💬 Messages</h2>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Message</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="messageTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="alertSection" class="section">
+    <h2>🚨 Emergency Alerts</h2>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Child</th>
+                    <th>Parent</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="emergencyTable"></tbody>
+        </table>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<script>
+
+// SHOW SECTION
+function showSection(section) {
+    document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+    document.getElementById(section + "Section").style.display = "block";
+
+    // if (section === "child") loadChildren();
+    if (section === "child") {
+    loadChildren();
+}
+
+if (section === "appointment") {
+    loadAppointments();   // ✅ ADD THIS
+}
+
+if(section === "vaccination"){
+    loadVaccinations();
+}
+
+if (section === "alert") {
+    loadEmergencies();   // ✅ ADD THIS
+
+}
+if (section === "message") {
+    loadMessages();
+}
+
+
+
+
+}
+
+// LOAD DATA
+function loadChildren() {
+    fetch("/api/children")
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "";
+
+        data.forEach(child => {
+
+            let photosHTML = "";
+
+            try {
+                if (child.symptom_photos) {
+                    const photos = JSON.parse(child.symptom_photos);
+                    photos.forEach(photo => {
+                        photosHTML += `<img src="/uploads/${photo}" style="width:50px;height:50px;border-radius:5px;">`;
+                    });
+                }
+            } catch(e){}
+
+            html += `
+                <tr id="row-${child.id}">
+                    <td>${child.name}</td>
+                    <td>${child.age}</td>
+                    <td>${child.symptoms}</td>
+                    <td>${photosHTML}</td>
+
+                    <td id="action-${child.id}">
+                        <button class="btn view" onclick="viewChild(${child.id})">View</button>
+                        <button class="btn approve" onclick="approveChild(${child.id})">Approve</button>
+                        <button class="btn appointment" onclick="makeAppointment(${child.id})">Appointment</button>
+                        <button class="btn delete" onclick="deleteChild(${child.id})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("childTable").innerHTML = html;
+    });
+}
+
+
+// DELETE
+function deleteChild(id) {
+    if (!confirm("Delete this record?")) return;
+
+    fetch('/deleteChild/' + id, { method: 'DELETE' })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        document.getElementById("row-" + id).remove();
+    });
+}
+
+
+// VIEW
+function viewChild(id){
+    window.location.href = "childDetails.html?id=" + id;
+}
+
+
+// APPROVE (IMPORTANT FIX)
+function approveChild(id) {
+
+    fetch('/approveChild/' + id, { method: 'POST' })
+    .then(res => res.text())
+    .then(msg => {
+
+        alert("Approved ✅");
+
+        // ❌ DO NOT CHANGE BUTTON COLOR
+        // ✅ ONLY CHANGE TEXT
+        document.getElementById("action-" + id).innerHTML = `
+            <span class="approved-text">✔ Approved</span>
+            <button class="btn appointment" onclick="makeAppointment(${id})">Appointment</button>
+        `;
+    });
+}
+
+
+// APPOINTMENT
+// function makeAppointment(id){
+//     alert("Appointment created for child ID: " + id);
+// }
+
+// function makeAppointment(id){
+
+//     const date = prompt("Enter Date (YYYY-MM-DD)");
+//     const time = prompt("Enter Time (HH:MM)");
+
+//     if (!date || !time) return;
+
+//     fetch("/createAppointment", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({
+//             childId: id,
+//             date: date,
+//             time: time
+//         })
+//     })
+//     .then(res => res.text())
+//     .then(msg => {
+//         alert(msg);
+//     })
+//     .catch(err => console.log(err));
+// }
+
+function makeAppointment(id){
+
+    // const date = prompt("Enter Date (YYYY-MM-DD)");
+    const date = prompt("Enter Date (YYYY-MM-DD)");
+
+if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    alert("❌ Invalid Date Format! Use YYYY-MM-DD");
+    return;
+}
+
+   const time = prompt("Enter Time (HH:MM)");
+
+if (!time || !/^\d{2}:\d{2}$/.test(time)) {
+    alert("❌ Invalid Time Format! Use HH:MM");
+    return;
+}
+
+// Convert to MySQL format
+const formattedTime = time + ":00";
+
+    if (!date || !time) return;
+
+    fetch("/createAppointment", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            childId: id,
+            date: date,
+            time: time
+        })
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+
+        loadAppointments();   // ✅ IMPORTANT (auto refresh table)
+    })
+    .catch(err => console.log(err));
+}
+
+
+// ✅ LOAD APPOINTMENTS
+function loadAppointments() {
+
+    fetch("/api/appointments")
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "";
+
+        data.forEach(app => {
+            html += `
+                <tr>
+                    <td>${app.child_name}</td>
+                    <td>${app.parent_name}</td>
+                    <td>${new Date(app.date).toLocaleDateString()}</td>
+                    <td>${app.time.substring(0,5)}</td>
+
+
+                    <td>
+                        <span style="
+                            padding:6px 12px;
+                            border-radius:8px;
+                            color:white;
+                            font-weight:bold;
+                            background:${app.status === 'Approved' ? '#2ecc71' : '#f39c12'};
+                        ">
+                            ${app.status}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="btn approve" onclick="approveAppointment(${app.id})">Approve</button>
+                        <button class="btn delete" onclick="deleteAppointment(${app.id})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("appointmentTable").innerHTML = html;
+    });
+}
+// function approveAppointment(id){
+//     fetch('/approveAppointment/' + id, { method: 'POST' })
+//     .then(() => loadAppointments());
+// }
+
+function approveAppointment(id){
+    fetch('/approveAppointment/' + id, { method: 'POST' })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        loadAppointments(); // 🔥 refresh
+    });
+}
+
+// function deleteAppointment(id){
+//     fetch('/deleteAppointment/' + id, { method: 'DELETE' })
+//     .then(() => loadAppointments());
+// }
+function deleteAppointment(id){
+    if (!confirm("Delete appointment?")) return;
+
+    fetch('/deleteAppointment/' + id, { method: 'DELETE' })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        loadAppointments(); // 🔥 refresh
+    });
+}
+// function loadEmergencies() {
+//     fetch('/api/emergency')
+//         .then(res => res.json())
+//         .then(data => {
+//             const table = document.getElementById('emergencyTable');
+//             table.innerHTML =" ";
+
+//             data.forEach(e => {
+//                 table.innerHTML += `
+//                     <tr>
+//                         <td>${e.child_name}</td>
+//                         <td>${e.parent_name}</td>
+//                         <td>${e.message}</td>
+//                         <td>${e.status}</td>
+//                         <td>
+//   ${e.status === 'Pending' 
+//     ? `<button onclick="markHandled(${row.id})">Handle</button>`
+//     : `<span style="color:green;">Handled</span>`
+//   }
+// </td>
+
+//                     </tr>
+//                 `;
+//             });
+//         });
+// }
+function loadEmergencies() {
+    fetch('/api/emergency')
+        .then(res => res.json())
+        .then(data => {
+            if (data.length === 0) {
+    document.getElementById("emergencyTable").innerHTML = `
+        <tr>
+            <td colspan="5" style="padding:20px; text-align:center;">
+                No emergency alerts 🚨
+            </td>
+        </tr>
+    `;
+    return;
+}
+
+
+            let html = "";
+
+            data.forEach(e => {
+
+                html += `
+                    <tr class="${e.status === 'Pending' ? 'emergency-row' : ''}">
+                        <td>${e.child_name}</td>
+                        <td>${e.parent_name}</td>
+                        <td>${e.message}</td>
+
+                        <td>
+                            <span class="${e.status === 'Pending' ? 'status-pending' : 'status-handled'}">
+                                ${e.status}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${e.status === 'Pending' 
+                                ? `<button class="btn approve" onclick="markHandled(${e.id})">Handle</button>`
+                                : `<span style="color:green;font-weight:bold;">✔ Done</span>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("emergencyTable").innerHTML = html;
+        });
+}
+
+function handleEmergency(id) {
+    fetch(`/api/emergency/${id}`, {
+        method: 'PUT'
+    })
+    .then(() => loadEmergencies());
+}
+
+function sendEmergency() {
+    fetch('/api/emergency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            child_id: 1,
+            child_name: "Athrav",
+            parent_name: "Akshada",
+            message: "High fever urgent!"
+        })
+    })
+    .then(res => res.text())
+    .then(alert);
+}
+
+// function loadMessages() {
+//     fetch('/api/messages?sender=Doctor&receiver=Parent')
+//         .then(res => res.json())
+//         .then(data => {
+//             const chatBox = document.getElementById('chatBox');
+//             chatBox.innerHTML = '';
+
+//             data.forEach(m => {
+//                 chatBox.innerHTML += `
+//                     <div>
+//                         <b>${m.sender}:</b> ${m.message}
+//                     </div>
+//                 `;
+//             });
+
+//             chatBox.scrollTop = chatBox.scrollHeight;
+//         });
+// }
+
+function loadMessages() {
+    fetch('/api/messages')
+    .then(res => res.json())
+    .then(data => {
+
+        let rows = "";
+
+        data.forEach(msg => {
+            rows += `
+                <tr>
+                    <td>${msg.parent_name}</td>
+                    <td>${msg.child_name}</td>
+                    <td>${msg.message}</td>
+                    <td>${new Date(msg.created_at).toLocaleString()}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("messageTableBody").innerHTML = rows;
+    })
+    .catch(err => console.log(err));
+}
+
+function sendMessage() {
+    const msg = document.getElementById('msgInput').value;
+
+    fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            sender: 'Doctor',
+            receiver: 'Parent',
+            message: msg
+        })
+    })
+    .then(() => {
+        document.getElementById('msgInput').value = '';
+        loadMessages();
+    });
+}
+
+fetch('/get-emergencies')
+.then(res => res.json())
+.then(data => {
+    let rows = '';
+
+    data.forEach(item => {
+        rows += `
+        <tr>
+            <td>${item.child_name}</td>
+            <td>${item.parent_name}</td>
+            <td>${item.message}</td>
+            <td>${item.status}</td>
+            <td>
+                <button>Resolve</button>
+            </td>
+        </tr>`;
+    });
+
+    document.getElementById('emergencyTable').innerHTML = rows;
+})
+.catch(err => console.log(err));
+
+function markHandled(id) {
+    fetch(`/api/emergencies/${id}`, {
+        method: 'PUT'
+    }).then(() => {
+        location.reload();
+    });
+}
+
+fetch('/api/messages')
+  .then(res => res.json())
+  .then(data => {
+    let rows = "";
+
+    data.forEach(msg => {
+      rows += `
+        <tr>
+          <td>${msg.parent_name}</td>
+          <td>${msg.child_name}</td>
+          <td>${msg.message}</td>
+          <td>${new Date(msg.created_at).toLocaleString()}</td>
+        </tr>
+      `;
+    });
+
+    document.getElementById("messageTableBody").innerHTML = rows;
+  });
+
+function playAlertSound() {
+    const audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
+    audio.play();
+}
+
+// LOAD VACCINATIONS
+// function loadVaccinations(){
+
+//     fetch('/api/vaccinations')
+//     .then(res => res.json())
+//     .then(data => {
+
+//         let rows = "";
+
+//         data.forEach(v => {
+
+//             rows += `
+//                 <tr>
+
+//                     <td>${v.child_name || v.child_id}</td>
+
+//                     <td>${v.vaccine_name}</td>
+
+//                     <td>
+//                         ${new Date(v.due_date).toLocaleDateString()}
+//                     </td>
+
+//                     <td>
+//                         <span style="
+//                             padding:6px 12px;
+//                             border-radius:8px;
+//                             color:white;
+//                             font-weight:bold;
+//                             background:
+//                             ${v.status === 'Completed'
+//                                 ? '#2ecc71'
+//                                 : '#f39c12'};
+//                         ">
+//                             ${v.status}
+//                         </span>
+//                     </td>
+
+//                     <td>
+
+//                         <button
+//                             class="btn approve"
+//                             onclick="completeVaccination(${v.id})"
+//                         >
+//                             Complete
+//                         </button>
+
+//                         <button
+//                             class="btn delete"
+//                             onclick="deleteVaccination(${v.id})"
+//                         >
+//                             Delete
+//                         </button>
+
+//                     </td>
+
+//                 </tr>
+//             `;
+//         });
+
+//         document.getElementById('vaccinationTable').innerHTML = rows;
+//     });
+// }
+
+
+// // COMPLETE
+// function completeVaccination(id){
+
+//     fetch('/completeVaccination/' + id, {
+//         method:'PUT'
+//     })
+//     .then(res => res.text())
+//     .then(msg => {
+
+//         alert(msg);
+
+//         loadVaccinations();
+//     });
+// }
+
+
+// // DELETE
+// function deleteVaccination(id){
+
+//     if(!confirm("Delete Vaccination?")) return;
+
+//     fetch('/deleteVaccination/' + id, {
+//         method:'DELETE'
+//     })
+//     .then(res => res.text())
+//     .then(msg => {
+
+//         alert(msg);
+
+//         loadVaccinations();
+//     });
+// }
+
+
+// loadVaccinations();
+
+// function loadVaccinations() {
+
+//     fetch('/api/myvaccinations')
+
+//     .then(res => res.json())
+
+//     .then(data => {
+
+//         console.log(data);
+
+//         let html = "";
+
+//         data.forEach(v => {
+
+//             html += `
+//             <tr style="background:white;text-align:center;">
+                
+//                 <td>${v.child_name}</td>
+
+//                 <td>${v.vaccine_name}</td>
+
+//                 <td>
+//                     ${v.due_date.split('T')[0]}
+//                 </td>
+
+//                 <td>
+//                     ${v.status}
+//                 </td>
+
+//                 <td>
+//                     <button onclick="markDone(${v.child_id})"
+//                     style="
+//                     padding:8px 12px;
+//                     border:none;
+//                     background:#2196f3;
+//                     color:white;
+//                     border-radius:5px;
+//                     cursor:pointer;">
+//                     Done
+//                     </button>
+//                 </td>
+
+//             </tr>
+//             `;
+
+//         });
+
+//         document.getElementById("vaccinationTable").innerHTML = html;
+
+//     })
+
+//     .catch(err => {
+
+//         console.log(err);
+
+//     });
+
+// }
+
+// function markDone(id){
+
+//     alert("Vaccination marked complete for Child ID: " + id);
+
+// }
+
+
+function loadVaccinations() {
+
+    fetch('/api/myvaccinations')
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        let html = "";
+
+        data.forEach(v => {
+
+            // ✅ STATUS COLORS
+            let statusColor = "";
+            let actionButton = "";
+
+            // COMPLETED
+            if (v.status === "Completed") {
+
+                statusColor = "#2ecc71";
+
+                actionButton = `
+                    <button
+                        style="
+                        padding:8px 12px;
+                        border:none;
+                        background:#2ecc71;
+                        color:white;
+                        border-radius:5px;
+                        font-weight:bold;
+                        cursor:default;
+                        ">
+                        ✔ Completed
+                    </button>
+                `;
+            }
+
+            // CURRENT
+            else if (v.status === "Current") {
+
+                statusColor = "#f39c12";
+
+                actionButton = `
+                    <button
+                        onclick="markDone(${v.child_id})"
+                        style="
+                        padding:8px 12px;
+                        border:none;
+                        background:#f39c12;
+                        color:white;
+                        border-radius:5px;
+                        cursor:pointer;
+                        ">
+                        💉 Vaccinate Now
+                    </button>
+                `;
+            }
+
+            // UPCOMING
+            else {
+
+                statusColor = "#3498db";
+
+                actionButton = `
+                    <button
+                        style="
+                        padding:8px 12px;
+                        border:none;
+                        background:#3498db;
+                        color:white;
+                        border-radius:5px;
+                        cursor:default;
+                        ">
+                        ⏳ Upcoming
+                    </button>
+                `;
+            }
+
+            html += `
+            <tr style="background:white;text-align:center;">
+
+                <td>${v.child_name}</td>
+
+                <td>${v.vaccine_name}</td>
+
+                <td>
+                    ${v.due_date.split('T')[0]}
+                </td>
+
+                <td>
+                    <span style="
+                        padding:6px 12px;
+                        border-radius:8px;
+                        color:white;
+                        font-weight:bold;
+                        background:${statusColor};
+                    ">
+                        ${v.status}
+                    </span>
+                </td>
+
+                <td>
+                    ${actionButton}
+                </td>
+
+            </tr>
+            `;
+        });
+
+        document.getElementById("vaccinationTable").innerHTML = html;
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+    });
+
+}
+
+// MARK DONE
+function markDone(id){
+
+    alert("💉 Vaccination completed for Child ID: " + id);
+
+}
+
+
+</script>
+
+</body>
+</html>

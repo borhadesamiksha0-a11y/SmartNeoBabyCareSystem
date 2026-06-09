@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Report</title>
+</head>
+<body>
+
+<h2>Add Medical Report</h2>
+
+<form id="reportForm">
+
+    <input type="number" id="c_id" placeholder="Child ID" required>
+    <input type="number" id="d_id" placeholder="Doctor ID" required>
+
+    <textarea id="diagnosis"
+    placeholder="Diagnosis"></textarea>
+
+    <textarea id="prescription"
+    placeholder="Prescription"></textarea>
+
+    <button type="submit">Save Report</button>
+
+</form>
+
+<script>
+
+document.getElementById('reportForm')
+.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    const data = {
+        c_id: document.getElementById('c_id').value,
+        d_id: document.getElementById('d_id').value,
+        diagnosis: document.getElementById('diagnosis').value,
+        prescription: document.getElementById('prescription').value
+    };
+
+    const res = await fetch('/addReport', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    const msg = await res.text();
+
+    alert(msg);
+});
+
+</script>
+
+</body>
+</html>

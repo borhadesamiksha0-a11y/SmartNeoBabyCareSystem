@@ -1,0 +1,389 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+
+<style>
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body{
+background-color: #021012;
+font-family: sans-serif;
+}
+.formContainer{
+width: 80%;
+height: 85vh;
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+background-color: #E2F4FD;
+padding: 20px;
+}
+header{
+text-align: center;
+margin: 2rem 0;
+font-weight: 600;
+}
+form{
+width: 90%;
+margin: 1rem auto;
+}
+.formDetails{
+margin: 1rem 0;
+}
+label{
+display: block;
+font-size: 1rem;
+font-weight: 600;
+margin-bottom: .4rem;
+}
+input{
+width: 100%;
+padding: .6rem 0;
+font-size: 1rem;
+}
+button{
+margin: 1.1rem 0;
+background-color: #053135;
+color: #fff;
+font-weight: 600;
+border: none;
+padding: .8rem 0;
+width: 100%;
+cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="formContainer">
+<header>
+<h1>Register</h1>
+</header>
+
+<form action="/register" method="POST">
+
+<div class="formDetails">
+<label>Name:</label>
+<input type="text" name="name" required>
+</div>
+
+<div class="formDetails">
+<label>Email:</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="formDetails">
+<label>Password:</label>
+<input type="password" name="password" required>
+</div>
+
+<div class="formDetails">
+<label>Confirm Password:</label>
+<input type="password" name="confirmpassword" required>
+</div>
+
+<button type="submit">Register</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
+
+
+<script>
+const myForm = document.getElementById('myForm');
+myForm.addEventListener('submit', (event) => {
+event.preventDefault(); // prevent form submission
+//Validate for name
+const name = myForm.elements.name.value.trim();
+const nameError = document.querySelector('#name + .errorMessage');
+const nameInput = document.getElementById('name');
+if (name === '') {
+nameError.textContent = 'Name is required.';
+nameInput.parentNode.classList.add('error');
+nameInput.parentNode.classList.remove('success');
+} else {
+nameError.textContent = '';
+nameInput.parentNode.classList.add('success');
+nameInput.parentNode.classList.remove('error');
+}
+//Validate for email
+const email = myForm.elements.email.value.trim();
+const emailError = document.querySelector('#email + .errorMessage');
+const emailInput = document.getElementById('email');
+if (email === '') {
+emailError.textContent = 'Email is required.';
+emailInput.parentNode.classList.add('error');
+emailInput.parentNode.classList.remove('success');
+} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+emailError.textContent = 'Please enter a valid email address.';
+emailInput.parentNode.classList.add('error');
+emailInput.parentNode.classList.remove('success');
+} else {
+emailError.textContent = '';
+emailInput.parentNode.classList.add('success');
+emailInput.parentNode.classList.remove('error');
+}
+//Validate password
+const password = myForm.elements.password.value.trim();
+const passwordError = document.querySelector('#password + .errorMessage');
+const passwordInput = document.getElementById('password');
+if (password === '') {
+passwordError.textContent = 'Password is required.';
+passwordInput.parentNode.classList.add('error');
+passwordInput.parentNode.classList.remove('success');
+} else if (password.length < 8) {
+passwordError.textContent = 'Password is expected to be 8 characters.';
+passwordInput.parentNode.classList.add('error');
+passwordInput.parentNode.classList.remove('success');
+} else {
+passwordError.textContent = '';
+passwordInput.parentNode.classList.add('success');
+passwordInput.parentNode.classList.remove('error');
+}
+//Validate confirm password
+const confirmPassword = myForm.elements.confirmpassword.value.trim();
+const confirmPasswordError = document.querySelector('#confirmPassword + .errorMessage');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+if (confirmPassword === '') {
+confirmPasswordError.textContent = 'Confirm Password is required.';
+confirmPasswordInput.parentNode.classList.add('error');
+confirmPasswordInput.parentNode.classList.remove('success');
+} else if (confirmPassword !== password) {
+confirmPasswordError.textContent = 'Passwords do not match.';
+confirmPasswordInput.parentNode.classList.add('error');
+confirmPasswordInput.parentNode.classList.remove('success');
+} else {
+confirmPasswordError.textContent = '';
+confirmPasswordInput.parentNode.classList.add('success');
+confirmPasswordInput.parentNode.classList.remove('error');
+}
+//Submit the form if there are no errors
+if (nameError.textContent === '' && emailError.textContent === '' && 
+passwordError.textContent === '' && confirmPasswordError.textContent === '') {
+myForm.submit();
+}
+});
+</script> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Smart Neo Baby Care</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+} */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+
+    /* 🔥 Background Image */
+    background: url('/images/bg4.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card */
+.register-card {
+    position: relative;
+    z-index: 1;
+    background: white;
+    padding: 35px;
+    width: 380px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* Title */
+.register-card h2 {
+    margin-bottom: 20px;
+    color: #2193b0;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.4); /* dark layer */
+    z-index: -1;
+}
+
+
+/* Input */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #2193b0;
+    outline: none;
+}
+
+/* Error */
+.error {
+    color: red;
+    font-size: 12px;
+    text-align: left;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #2193b0;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #176d85;
+}
+
+/* Footer */
+.footer {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.footer a {
+    color: #2193b0;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="register-card">
+
+    <h2>📝 Register</h2>
+
+    <form id="myForm" action="/register" method="POST">
+
+        <input type="text" id="name" name="name" placeholder="👤 Full Name" required>
+        <div class="error" id="nameError"></div>
+
+        <input type="email" id="email" name="email" placeholder="📧 Email" required>
+        <div class="error" id="emailError"></div>
+
+        <input type="password" id="password" name="password" placeholder="🔒 Password" required>
+        <div class="error" id="passwordError"></div>
+
+        <input type="password" id="confirmPassword" name="confirmpassword" placeholder="🔒 Confirm Password" required>
+        <div class="error" id="confirmPasswordError"></div>
+        <!-- <select name="role" required>
+    <option value="">👤 Select Role</option>
+    <option value="parent">👶parent</option>
+    <option value="doctor">🩺doctor</option>
+    <option value="admin">⚙️admin</option>
+</select> -->
+
+        <select name="role" required>
+    <option value="doctor">Doctor</option>
+    <option value="admin">Admin</option>
+    <option value="parent">Parent</option>
+       </select>
+
+        <button type="submit">🚀 Register</button>
+
+    </form>
+
+    <div class="footer">
+        Already have an account? <a href="/login">Login</a>
+    </div>
+
+</div>
+
+<script>
+const myForm = document.getElementById('myForm');
+
+myForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+    let valid = true;
+
+    // Name
+    if (name === '') {
+        document.getElementById('nameError').innerText = "Name is required";
+        valid = false;
+    } else {
+        document.getElementById('nameError').innerText = "";
+    }
+
+    // Email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('emailError').innerText = "Enter valid email";
+        valid = false;
+    } else {
+        document.getElementById('emailError').innerText = "";
+    }
+
+    // Password
+    if (password.length < 8) {
+        document.getElementById('passwordError').innerText = "Minimum 8 characters";
+        valid = false;
+    } else {
+        document.getElementById('passwordError').innerText = "";
+    }
+
+    // Confirm Password
+    if (confirmPassword !== password) {
+        document.getElementById('confirmPasswordError').innerText = "Passwords do not match";
+        valid = false;
+    } else {
+        document.getElementById('confirmPasswordError').innerText = "";
+    }
+
+    // Submit if valid
+    if (valid) {
+        myForm.submit();
+    }
+});
+</script>
+
+</body>
+</html>

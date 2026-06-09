@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reports</title>
+</head>
+<body>
+
+<h2>Medical Reports</h2>
+
+<div id="reports"></div>
+
+<script>
+
+async function loadReports() {
+
+    const res = await fetch('/api/reports');
+
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(r => {
+
+        html += `
+            <div style="border:1px solid black;
+            padding:10px;
+            margin:10px;">
+
+                <h3>Child ID: ${r.c_id}</h3>
+
+                <p><b>Diagnosis:</b>
+                ${r.diagnosis}</p>
+
+                <p><b>Prescription:</b>
+                ${r.prescription}</p>
+
+            </div>
+        `;
+    });
+
+    document.getElementById('reports').innerHTML = html;
+}
+
+loadReports();
+
+</script>
+
+</body>
+</html>
